@@ -1,0 +1,54 @@
+{
+  "scenarios": [
+    {
+      "scenario": "baseline",
+      "price_index": 1.0,
+      "composite_demand_ratio": 1.0,
+      "max_relative_residual": 0.0,
+      "total_quantity_tonnes": 103535997.776,
+      "total_value_usd": 45953993911.51,
+      "nfev": 1
+    },
+    {
+      "scenario": "us_plus_15pp",
+      "price_index": 1.0194597716947045,
+      "composite_demand_ratio": 0.9942348273392413,
+      "max_relative_residual": 1.1102230246251565e-15,
+      "total_quantity_tonnes": 103056092.30060616,
+      "total_value_usd": 44990534385.59887,
+      "nfev": 5
+    },
+    {
+      "scenario": "us_plus_25pp",
+      "price_index": 1.030933190998182,
+      "composite_demand_ratio": 0.9909023158305861,
+      "max_relative_residual": 1.5543122344752192e-15,
+      "total_quantity_tonnes": 102788525.63896812,
+      "total_value_usd": 44537427589.18783,
+      "nfev": 5
+    },
+    {
+      "scenario": "us_plus_50pp",
+      "price_index": 1.0556361465291475,
+      "composite_demand_ratio": 0.9838881369930794,
+      "max_relative_residual": 3.476108290101365e-13,
+      "total_quantity_tonnes": 102250104.24069355,
+      "total_value_usd": 43821661775.844696,
+      "nfev": 5
+    }
+  ],
+  "checks": {
+    "baseline_quantity_reproduced": true,
+    "baseline_price_reproduced": true,
+    "value_equals_fob_times_quantity": true,
+    "quantity_shares_sum_to_one": true,
+    "value_shares_sum_to_one": true,
+    "positive_quantities_prices": true,
+    "capacity_respected": true,
+    "us_volume_nonincreasing_in_tariff": true,
+    "binding_capacity_case_solved": true,
+    "sigma_one_limit_reproduces_baseline": true
+  },
+  "sensitivity_max_residual": 4.6814774279368976e-12,
+  "curve_max_residual": 6.467049118441537e-13
+}

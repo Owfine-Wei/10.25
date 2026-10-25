@@ -1,0 +1,128 @@
+{
+  "model_config": {
+    "base_year": 2024,
+    "input_csv": "data/Trade Data/Soybean_Competition_Exports_to_China_2015_2024.csv",
+    "clean_csv": "outputs/Q1/china_soybean_clean.csv",
+    "output_dir": "result/Q1",
+    "countries": [
+      "USA",
+      "BRA",
+      "ARG"
+    ],
+    "country_names": {
+      "USA": "美国",
+      "BRA": "巴西",
+      "ARG": "阿根廷"
+    },
+    "model": {
+      "substitution_elasticity": 4.0,
+      "demand_elasticity": 0.3,
+      "supply_elasticity": {
+        "USA": 0.5,
+        "BRA": 0.8,
+        "ARG": 0.6
+      },
+      "base_tariff": {
+        "USA": 0.03,
+        "BRA": 0.03,
+        "ARG": 0.03
+      },
+      "freight_usd_per_tonne": {
+        "USA": 0.0,
+        "BRA": 0.0,
+        "ARG": 0.0
+      },
+      "capacity_multiplier": {
+        "USA": 1.3,
+        "BRA": 1.2,
+        "ARG": 1.3
+      }
+    },
+    "assumption_note": "税率、运费、弹性和供给上限均为可调假设，非数据估计。3%仅作统一基准税率假设，不代表已核验2024年实际有效税率；运费为零是数据缺失下的简化。新增关税为中国对美国大豆加征的百分点，不是美国进口税率。供给是对华可供给量，不是全国产量。",
+    "scenarios": [
+      {
+        "id": "baseline",
+        "label": "基准",
+        "tariff_addition": {
+          "USA": 0.0
+        }
+      },
+      {
+        "id": "us_plus_15pp",
+        "label": "美国+15个百分点",
+        "tariff_addition": {
+          "USA": 0.15
+        }
+      },
+      {
+        "id": "us_plus_25pp",
+        "label": "美国+25个百分点",
+        "tariff_addition": {
+          "USA": 0.25
+        }
+      },
+      {
+        "id": "us_plus_50pp",
+        "label": "美国+50个百分点",
+        "tariff_addition": {
+          "USA": 0.5
+        }
+      }
+    ],
+    "focus_scenario": "us_plus_25pp",
+    "sensitivity": {
+      "substitution_elasticity": [
+        2.0,
+        4.0,
+        6.0
+      ],
+      "demand_elasticity": [
+        0.1,
+        0.3,
+        0.6
+      ],
+      "supply_scale": [
+        0.5,
+        1.0,
+        2.0
+      ],
+      "tariff_grid": [
+        0.0,
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5
+      ]
+    },
+    "solver": {
+      "tolerance": 1e-10,
+      "residual_threshold": 1e-07,
+      "max_nfev": 2000
+    }
+  },
+  "figure_config": {
+    "country_colors": {
+      "USA": "#4477AA",
+      "BRA": "#228833",
+      "ARG": "#EE9944"
+    },
+    "fonts": [
+      "Microsoft YaHei",
+      "SimHei",
+      "DejaVu Sans"
+    ],
+    "font_size": 11,
+    "dpi": 160,
+    "grid_alpha": 0.2,
+    "figure_size": [
+      12,
+      4.8
+    ]
+  }
+}

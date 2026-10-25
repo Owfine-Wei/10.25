@@ -1,0 +1,5 @@
+# Python 3.8；已在本机 Lpytorch 环境验证，无须重复安装。
+numpy==1.24.4       # 数组与数值运算
+scipy==1.10.1       # 非线性均衡方程求解
+pandas==2.0.3       # 表格处理与 CSV 输出
+matplotlib==3.7.2   # 静态图表
