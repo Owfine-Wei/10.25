@@ -113,6 +113,45 @@ def plot_scenario_bar(res, base, label_map, out, kind="share"):
     plt.close(fig)
 
 
+def plot_scenario_share_qty(res, base, label_map, out):
+    """份额 + 出口量 合并为 1×2 双联图（减少图位占用）。"""
+    rows = [{"label": "Baseline\n(0%)",
+             **{f"share_{c}": base[c]["share"] for c in COUNTRIES},
+             **{f"qty_Mt_{c}": base[c]["qty_Mt"] for c in COUNTRIES}}]
+    for _, r in res.iterrows():
+        rows.append({"label": label_map[r["scenario"]],
+                     **{f"share_{c}": r[f"share_{c}"] * 100 for c in COUNTRIES},
+                     **{f"qty_Mt_{c}": r[f"qty_Mt_{c}"] for c in COUNTRIES}})
+    d = pd.DataFrame(rows)
+    scen = d["label"].tolist()
+    x = np.arange(len(scen))
+    w = 0.25
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.2), dpi=300)
+    panels = [("share", "Import share (%)", "(a) Import share"),
+              ("qty_Mt", "Export volume (Mt)", "(b) Export volume")]
+    for ax, (col, ylab, ptitle) in zip(axes, panels):
+        for i, c in enumerate(COUNTRIES):
+            vals = d[f"{col}_{c}"].tolist()
+            bars = ax.bar(x + (i - 1) * w, vals, w, label=CNAME[c], color=COLOR[c],
+                          edgecolor="white", linewidth=0.6)
+            for b, v in zip(bars, vals):
+                ax.annotate(f"{v:.1f}", (b.get_x() + b.get_width() / 2, v),
+                            textcoords="offset points", xytext=(0, 3),
+                            ha="center", fontsize=7.5)
+        _style(ax)
+        ax.set_xticks(x)
+        ax.set_xticklabels(scen, fontsize=9)
+        ax.set_ylabel(ylab)
+        ax.set_title(ptitle, fontsize=11)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels, loc="lower center", bbox_to_anchor=(0.5, -0.03),
+               ncol=3, frameon=False, fontsize=10)
+    fig.suptitle("Post-Tariff Distribution by Scenario", fontsize=13, y=1.0)
+    fig.tight_layout(rect=[0, 0.07, 1, 0.95])
+    fig.savefig(out, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
+
 def plot_sensitivity(sens, out):
     sens = sens[sens["scenario"].astype(str).str.startswith("S2_mid")].copy()
     fig, ax = plt.subplots(figsize=(8, 4.2), dpi=300)
@@ -183,8 +222,7 @@ def main():
     plot_historical(frame, rdir / "fig_historical_shares.png")
 
     res = pd.read_csv(rdir / "ces_scenario_results.csv")
-    plot_scenario_bar(res, base, label_map, rdir / "fig_scenario_shares.png", "share")
-    plot_scenario_bar(res, base, label_map, rdir / "fig_scenario_qty.png", "qty")
+    plot_scenario_share_qty(res, base, label_map, rdir / "fig_scenario_share_qty.png")
     plot_scenario_bar(res, base, label_map, rdir / "fig_scenario_value.png", "value")
     plot_donut(res, base, label_map, rdir / "fig_scenario_donut.png")
 
