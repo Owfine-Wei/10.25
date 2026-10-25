@@ -1,57 +1,27 @@
 {
+  "_note": "模型可配置参数。带 ★ 的字段需你按真实情况 / 最新数据调整（见 docs/Q1/合理取值确定来源.md）",
   "base_year": 2024,
-  "input_csv": "data/Trade Data/Soybean_Competition_Exports_to_China_2015_2024.csv",
-  "clean_csv": "outputs/Q1/china_soybean_clean.csv",
-  "output_dir": "result/Q1",
   "countries": ["USA", "BRA", "ARG"],
-  "country_names": {"USA": "美国", "BRA": "巴西", "ARG": "阿根廷"},
-  "model": {
-    "substitution_elasticity": 4.0,
-    "demand_elasticity": 0.3,
-    "supply_elasticity": {"USA": 0.5, "BRA": 0.8, "ARG": 0.6},
-    "base_tariff": {"USA": 0.03, "BRA": 0.03, "ARG": 0.03},
-    "freight_usd_per_tonne": {"USA": 0.0, "BRA": 0.0, "ARG": 0.0},
-    "capacity_multiplier": {"USA": 1.3, "BRA": 1.2, "ARG": 1.3}
+  "sigma": 4.0,
+  "calibrate_alpha": true,
+  "base_tariff": {
+    "USA": 0.0,
+    "BRA": 0.0,
+    "ARG": 0.0
   },
-  "assumption_note": "税率、运费、弹性和供给上限均为可调假设，非数据估计。3%仅作统一基准税率假设，不代表已核验2024年实际有效税率；运费为零是数据缺失下的简化。新增关税为中国对美国大豆加征的百分点，不是美国进口税率。供给是对华可供给量，不是全国产量。",
-  "scenarios": [
-    {"id": "baseline", "label": "基准", "tariff_addition": {"USA": 0.0}},
-    {"id": "us_plus_15pp", "label": "美国+15个百分点", "tariff_addition": {"USA": 0.15}},
-    {"id": "us_plus_25pp", "label": "美国+25个百分点", "tariff_addition": {"USA": 0.25}},
-    {"id": "us_plus_50pp", "label": "美国+50个百分点", "tariff_addition": {"USA": 0.50}}
-  ],
-  "focus_scenario": "us_plus_25pp",
-  "sensitivity": {
-    "substitution_elasticity": [2.0, 4.0, 6.0],
-    "demand_elasticity": [0.1, 0.3, 0.6],
-    "supply_scale": [0.5, 1.0, 2.0],
-    "tariff_grid": [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+  "scenarios": {
+    "S1_low":  {"USA": 0.10, "BRA": 0.0, "ARG": 0.0},
+    "S2_mid":  {"USA": 0.20, "BRA": 0.0, "ARG": 0.0},
+    "S3_high": {"USA": 0.34, "BRA": 0.0, "ARG": 0.0}
   },
-  "solver": {"tolerance": 1e-10, "residual_threshold": 1e-7, "max_nfev": 2000},
-  "april_2025": {
-    "scope": "2024年年度结构下，2025年4月政策的比较静态冲击；不是4月当月到港量预测",
-    "march_addition": 0.10,
-    "mfn_proxy": {"USA": 0.03, "BRA": 0.03, "ARG": 0.03},
-    "regimes": [
-      {"id": "legacy_excluded", "label": "旧附加税获排除", "legacy_us_tariff": 0.0},
-      {"id": "legacy_not_excluded", "label": "旧附加税未排除", "legacy_us_tariff": 0.275}
-    ],
-    "stages": [
-      {"id": "no_april", "label": "无4月加税对照", "april_addition": 0.0},
-      {"id": "announced_34", "label": "34%公告情景", "april_addition": 0.34},
-      {"id": "april10_84", "label": "4月10日84%", "april_addition": 0.84},
-      {"id": "april12_125", "label": "4月12日125%", "april_addition": 1.25}
-    ],
-    "profiles": [
-      {"id": "original", "label": "原假设组", "sigma": 4.0, "eta": 0.3, "supply": {"USA": 0.5, "BRA": 0.8, "ARG": 0.6}},
-      {"id": "supply_only", "label": "仅换供给弹性", "sigma": 4.0, "eta": 0.3, "supply": {"USA": 8.0, "BRA": 3.0, "ARG": 3.0}},
-      {"id": "reference", "label": "文献参考组", "sigma": 5.0, "eta": 0.46, "supply": {"USA": 8.0, "BRA": 3.0, "ARG": 3.0}}
-    ],
-    "reference_profile": "reference",
-    "reference_regime": "legacy_excluded",
-    "focus_stage": "april12_125",
-    "sensitivity": {"sigma": [2.0, 5.0, 7.0], "eta": [0.23, 0.46, 0.69], "supply_scale": [0.5, 1.0, 2.0]},
-    "capacity_test": [1.1, 1.2, 1.5],
-    "parameter_status": "sigma=5和供给8/3/3参照Martin(2020)表2并简化移植；eta=0.46参照Muhammad等(2019)大豆与豆油进口系统的价格效应。三者均不等于2025年本模型的已估计参数。HS1201汇总以主要非种用黄大豆税号代理。"
+  "import_demand": {
+    "use_base_year_total": true,
+    "growth_factor": 1.0
+  },
+  "sensitivity_sigma": [2.0, 3.0, 4.0, 4.9],
+  "exclude_years": [2017, 2018],
+  "paths": {
+    "data_csv": "data/Trade Data/Soybean_Competition_Exports_to_China_2015_2024.csv",
+    "result_dir": "result/Q1"
   }
 }

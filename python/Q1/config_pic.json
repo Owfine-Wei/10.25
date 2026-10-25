@@ -1,8 +1,11 @@
 {
-  "country_colors": {"USA": "#4477AA", "BRA": "#228833", "ARG": "#EE9944"},
-  "fonts": ["Microsoft YaHei", "SimHei", "DejaVu Sans"],
-  "font_size": 11,
-  "dpi": 160,
-  "grid_alpha": 0.2,
-  "figure_size": [12, 4.8]
+  "palette": {
+    "USA": "#1f77b4",
+    "BRA": "#2ca02c",
+    "ARG": "#ff7f0e"
+  },
+  "font_family": "SimHei",
+  "figure_dpi": 150,
+  "grid_alpha": 0.3,
+  "axis_color": "#333333"
 }
